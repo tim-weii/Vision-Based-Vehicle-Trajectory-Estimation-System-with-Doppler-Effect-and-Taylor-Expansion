@@ -120,8 +120,8 @@ The system processes video streams and sensor inputs step by step:
 ---
 
 4. **Sensor Fusion (GPS + Doppler)**  
-   - GPS provides ego-velocity $v_{ego}$ and heading $\psi$.  
-   - Doppler (or visual proxy) provides **radial relative velocity** $v_{rel}$.  
+   - **GPS** provides ego-velocity $v_{ego}$ and heading $\psi$.  
+   - **Doppler (or visual proxy)** provides **radial relative velocity** $v_{rel}$.  
    - Fusion yields **range and range-rate** estimation.  
 
    **Formula:**  
@@ -131,13 +131,13 @@ The system processes video streams and sensor inputs step by step:
 
 ---
 
-5.  **Risk Assessment**
+5. **Risk Assessment**
 
-The system evaluates collision risk with **two strategies**:
+The system evaluates collision risk with **two complementary strategies**:
 
 ---
 
-### A. Physics-based Safe Distance
+### 🅐 Physics-based Safe Distance
 
 $$
 d_{safe} = v_{ego} \cdot t_{react} + \frac{v_{ego}^2}{2a_{brake}}
@@ -147,13 +147,13 @@ $$
 - **$t_{react}$** – reaction time (反應時間，例如 1s)  
 - **$a_{brake}$** – maximum deceleration (最大減速度，例如 7 m/s²)  
 
-👉 Interpretation:  
-The safe distance equals the distance traveled during driver/system reaction + the braking distance needed to stop.  
-If the actual gap is smaller than $d_{safe}$, braking might not prevent a collision.
+💡 **Interpretation:**  
+Safe distance = **reaction distance + braking distance**.  
+If the actual gap is smaller than $d_{safe}$, even full braking may not avoid a collision.
 
 ---
 
-### B. Time-to-Collision (TTC)
+### 🅑 Time-to-Collision (TTC)
 
 $$
 TTC = \frac{distance}{\max(\epsilon, v_{closing})}
@@ -163,39 +163,44 @@ $$
 - **$v_{closing}$** – closing speed (相對接近速度，若前車比你慢則為正值)  
 - **$\epsilon$** – small constant to avoid division by zero  
 
-👉 Interpretation:  
-TTC estimates how many seconds remain before collision if both vehicles keep their current speed.  
-A smaller TTC means higher collision risk.
+💡 **Interpretation:**  
+TTC estimates *how many seconds remain before collision* if both vehicles keep their current speed.  
+A smaller TTC implies higher collision risk.
 
 ---
 
-### C. Alert Logic
+### 🅒 Alert Logic
 
-A **risk alert** is triggered if **either** condition is met:
+⚠️ A **risk alert** is triggered if **either** condition is met:
 
-- $distance < d_{safe}$ (too close for safe braking), **OR**  
-- $TTC < \tau$ (collision expected within threshold time, e.g., 2 seconds).
+- $distance < d_{safe}$ (**too close for safe braking**)  
+- **OR**  
+- $TTC < \tau$ (**collision expected within threshold time, e.g., 2s**)  
 
 ---
 
-###  Summary
+### 🔍 Summary
 
-- **Safe Distance** – answers *“Do I have enough space to stop safely?”*  
-- **TTC** – answers *“If nothing changes, how soon will I crash?”*  
-- Using both makes the system more robust: physics-based rules handle braking dynamics, while TTC handles relative motion timing.
-
+- **Safe Distance** → *“Do I have enough space to stop safely?”*  
+- **TTC** → *“If nothing changes, how soon will I crash?”*  
+- ✅ Combining both yields robustness:  
+  - *Safe Distance* covers braking dynamics.  
+  - *TTC* covers relative timing of collision.
 
 ---
 
 6. **Visualization & Alerts**  
    - Overlay predicted trajectories, risk zones, and alert signals.  
-   - High-risk vehicles are marked in **red** with optional audio/haptic alerts.  
-   - *Example:*  
-     ![Final overlay visualization](<img width="694" height="401" alt="image" src="https://github.com/user-attachments/assets/8658f11e-3da1-4606-9cfd-c3e5afeef054" />
+   - High-risk vehicles are marked in **red**, with optional audio/haptic alerts.  
+
+   *Example:*  
+   <p align="center">
+     <img width="694" height="401" alt="Risk Visualization" src="https://github.com/user-attachments/assets/8658f11e-3da1-4606-9cfd-c3e5afeef054" />
+   </p>
 
 ---
 
-##  System Diagram
+## 🗂 System Diagram
 
 ```mermaid
 flowchart LR
@@ -208,4 +213,3 @@ flowchart LR
     G --> H[Risk Assessment]
     H --> I[Visualization & Alerts]
 
-```
