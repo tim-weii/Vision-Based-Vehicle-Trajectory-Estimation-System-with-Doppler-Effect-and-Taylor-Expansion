@@ -52,7 +52,7 @@ Vehicles are detected from single or multiple cameras, and **license plates are 
 ```text
 Input
  ├─ Cameras (single/multi-view)
- ├─ GPS (ego-velocity, heading, timestamp)        │
+ ├─ GPS (ego-velocity, heading, timestamp) 
         ▼
 Perception
  ├─ Vehicle Detection (YOLOv3)
