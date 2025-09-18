@@ -87,35 +87,53 @@ Visualization & Output
 ```
 
 
-## 🔄 Workflow (Step-by-Step)
+##  Workflow (Step-by-Step)
 
 The system processes video streams and sensor inputs step by step:
 
+---
+
 1. **Vehicle Detection**  
-   - Detect vehicles from raw video frames using YOLOv3.  
-   - Extract license plate regions with preprocessing (contrast, denoising, edge ops).  
-   - Plate centers serve as **stable reference points**.  
-   - *Example:*  
-     ![Vehicle detection and plate extraction](<img width="204" height="155" alt="image" src="https://github.com/user-attachments/assets/1d25c0da-4d3f-437e-ba57-0d6853113141" />
-)
+   - Detect vehicles from raw video frames using **YOLOv3**.  
+   - Extract license plate regions with **preprocessing** (contrast enhancement, denoising, edge operations).  
+   - Use license plate **centers** as stable reference points for tracking.  
+
+   *Example:*  
+   <p align="center">
+     <img src="https://github.com/user-attachments/assets/1d25c0da-4d3f-437e-ba57-0d6853113141" 
+          alt="Vehicle detection and plate extraction" width="260" height="200">
+   </p>
 
 ---
 
 2. **Tracking (ID Consistency)**  
-   - Maintain consistent IDs across frames using a Kalman filter (state: `[x, y, vx, vy]`).  
-   - Prevents ID switching when occlusion or detection jitter occurs.
-   
+   - Maintain consistent IDs across frames using a **Kalman filter** (state vector: `[x, y, vx, vy]`).  
+   - Ensures temporal continuity and prevents ID switching during occlusion or detection noise.  
+
+   *Visualization:*  
+   <p align="center">
+     <img src="assets/tracking_example.png" alt="Kalman filter tracking visualization" width="400">
+   </p>
+
 ---
 
 3. **Trajectory Buffer & Taylor Expansion**  
-   - Store trajectory history in a sliding buffer `{t, x, y, θ}`.  
-   - Apply **Taylor expansion** for short-term trajectory prediction (0.5–1.5s).  
+   - Store trajectory history in a **sliding buffer** `{t, x, y, θ}` per track_id.  
+   - Apply **Taylor expansion (local polynomial approximation)** for **short-term trajectory prediction** (0.5–1.5s horizon).  
 
    **Formula:**  
    $$
-   x(t) \approx x_0 + v_x \Delta t + \tfrac{1}{2} a_x \Delta t^2 \\
+   x(t) \approx x_0 + v_x \Delta t + \tfrac{1}{2} a_x \Delta t^2
+   $$
+
+   $$
    y(t) \approx y_0 + v_y \Delta t + \tfrac{1}{2} a_y \Delta t^2
    $$
+
+   *Example:*  
+   <p align="center">
+     <img src="assets/taylor_prediction.png" alt="Taylor expansion trajectory prediction" width="400">
+   </p>
 
 ---
 
@@ -137,12 +155,12 @@ The system evaluates collision risk with **two complementary strategies**:
 
 ---
 
-### 🅐 Physics-based Safe Distance
+###  Physics-based Safe Distance
 
 $$
 d_{safe} = v_{ego} \cdot t_{react} + \frac{v_{ego}^2}{2a_{brake}}
 $$
-
+[
 - **$v_{ego}$** – ego vehicle speed (自車速度)  
 - **$t_{react}$** – reaction time (反應時間，例如 1s)  
 - **$a_{brake}$** – maximum deceleration (最大減速度，例如 7 m/s²)  
@@ -153,7 +171,7 @@ If the actual gap is smaller than $d_{safe}$, even full braking may not avoid a 
 
 ---
 
-### 🅑 Time-to-Collision (TTC)
+###  Time-to-Collision (TTC)
 
 $$
 TTC = \frac{distance}{\max(\epsilon, v_{closing})}
@@ -169,7 +187,7 @@ A smaller TTC implies higher collision risk.
 
 ---
 
-### 🅒 Alert Logic
+###  Alert Logic
 
 ⚠️ A **risk alert** is triggered if **either** condition is met:
 
@@ -179,11 +197,11 @@ A smaller TTC implies higher collision risk.
 
 ---
 
-### 🔍 Summary
+###  Summary
 
 - **Safe Distance** → *“Do I have enough space to stop safely?”*  
 - **TTC** → *“If nothing changes, how soon will I crash?”*  
-- ✅ Combining both yields robustness:  
+- Combining both yields robustness:  
   - *Safe Distance* covers braking dynamics.  
   - *TTC* covers relative timing of collision.
 
@@ -200,7 +218,7 @@ A smaller TTC implies higher collision risk.
 
 ---
 
-## 🗂 System Diagram
+##  System Diagram
 
 ```mermaid
 flowchart LR
