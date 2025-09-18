@@ -222,7 +222,7 @@ A smaller TTC implies higher collision risk.
 flowchart LR
     A[Camera Frames] --> B[YOLOv3 Detection];
     B --> C[License Plate Extraction];
-    C --> D[Tracking (Kalman)];
+    C --> D[Tracking => Kalman];
     D --> E[Trajectory Buffer];
     E --> F[Taylor Expansion Prediction];
     F --> G[Fusion => GPS + Doppler];
