@@ -19,9 +19,7 @@ Vehicles are detected from single or multiple cameras, and **license plates are 
 ```text
 Input
  ├─ Cameras (single/multi-view)
- ├─ GPS (ego-velocity, heading, timestamp)
- └─ Doppler Radar (or visual proxy; optional)
-        │
+ ├─ GPS (ego-velocity, heading, timestamp)        │
         ▼
 Perception
  ├─ Vehicle Detection (YOLOv3)
@@ -40,7 +38,7 @@ Trajectory & Prediction
         ▼
 Sensor Fusion
  ├─ Ego velocity & heading from GPS
- ├─ Relative radial velocity from Doppler/visual proxy
+ ├─ Relative radial velocity from Doppler
  └─ Range & range-rate estimation
         │
         ▼
