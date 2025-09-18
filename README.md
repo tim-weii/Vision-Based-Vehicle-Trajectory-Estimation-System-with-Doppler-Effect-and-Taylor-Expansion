@@ -131,20 +131,59 @@ The system processes video streams and sensor inputs step by step:
 
 ---
 
-5. **Risk Assessment**  
-   - Two strategies:  
-     - **Physics-based safe distance:**  
-       $$
-       d_{safe} = v_{ego} \cdot t_{react} + \frac{v_{ego}^2}{2a_{brake}}
-       $$  
-     - **Time-to-Collision (TTC):**  
-       $$
-       TTC = \frac{distance}{\max(\epsilon, v_{closing})}
-       $$  
+5.  **Risk Assessment**
 
-   - Risk alert is triggered if:  
-     - $distance < d_{safe}$, OR  
-     - $TTC < \tau$ (threshold).  
+The system evaluates collision risk with **two strategies**:
+
+---
+
+### A. Physics-based Safe Distance
+
+$$
+d_{safe} = v_{ego} \cdot t_{react} + \frac{v_{ego}^2}{2a_{brake}}
+$$
+
+- **$v_{ego}$** – ego vehicle speed (自車速度)  
+- **$t_{react}$** – reaction time (反應時間，例如 1s)  
+- **$a_{brake}$** – maximum deceleration (最大減速度，例如 7 m/s²)  
+
+👉 Interpretation:  
+The safe distance equals the distance traveled during driver/system reaction + the braking distance needed to stop.  
+If the actual gap is smaller than $d_{safe}$, braking might not prevent a collision.
+
+---
+
+### B. Time-to-Collision (TTC)
+
+$$
+TTC = \frac{distance}{\max(\epsilon, v_{closing})}
+$$
+
+- **$distance$** – current distance to the lead vehicle (自車與前車的距離)  
+- **$v_{closing}$** – closing speed (相對接近速度，若前車比你慢則為正值)  
+- **$\epsilon$** – small constant to avoid division by zero  
+
+👉 Interpretation:  
+TTC estimates how many seconds remain before collision if both vehicles keep their current speed.  
+A smaller TTC means higher collision risk.
+
+---
+
+### C. Alert Logic
+
+A **risk alert** is triggered if **either** condition is met:
+
+- $distance < d_{safe}$ (too close for safe braking), **OR**  
+- $TTC < \tau$ (collision expected within threshold time, e.g., 2 seconds).
+
+---
+
+###  Summary
+
+- **Safe Distance** – answers *“Do I have enough space to stop safely?”*  
+- **TTC** – answers *“If nothing changes, how soon will I crash?”*  
+- Using both makes the system more robust: physics-based rules handle braking dynamics, while TTC handles relative motion timing.
+
 
 ---
 
