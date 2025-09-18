@@ -112,9 +112,11 @@ The system processes video streams and sensor inputs step by step:
 
    *Visualization:*  
    <p align="center">
-     <img src="<img width="600" height="453" alt="image" src="https://www.researchgate.net/publication/354627620/figure/fig4/AS:1080241044889618@1634560943438/Working-principle-of-Kalman-filter.jpg" />
-https://www.researchgate.net/figure/Working-principle-of-Kalman-filter_fig4_354627620
-   </p>
+     <img src="https://www.researchgate.net/publication/354627620/figure/fig4/AS:1080241044889618@1634560943438/Working-principle-of-Kalman-filter.jpg" 
+          alt="Working principle of Kalman filter" width="600" height="453">
+   </p>  
+
+   *Source:* [ResearchGate – Working principle of Kalman filter](https://www.researchgate.net/figure/Working-principle-of-Kalman-filter_fig4_354627620)
 
 ---
 
