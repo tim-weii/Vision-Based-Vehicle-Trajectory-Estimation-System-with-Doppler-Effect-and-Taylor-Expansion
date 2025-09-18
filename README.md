@@ -112,7 +112,8 @@ The system processes video streams and sensor inputs step by step:
 
    *Visualization:*  
    <p align="center">
-     <img src="assets/tracking_example.png" alt="Kalman filter tracking visualization" width="400">
+     <img src="<img width="258" height="195" alt="image" src="https://github.com/user-attachments/assets/0b624894-90b0-4584-9c3f-1edce21c9709" />
+" alt="Kalman filter tracking visualization" width="400">
    </p>
 
 ---
@@ -129,11 +130,6 @@ The system processes video streams and sensor inputs step by step:
    $$
    y(t) \approx y_0 + v_y \Delta t + \tfrac{1}{2} a_y \Delta t^2
    $$
-
-   *Example:*  
-   <p align="center">
-     <img src="assets/taylor_prediction.png" alt="Taylor expansion trajectory prediction" width="400">
-   </p>
 
 ---
 
