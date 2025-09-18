@@ -1,0 +1,2 @@
+# Vision-Based-Vehicle-Trajectory-Estimation-System-with-Doppler-Effect-and-Taylor-Expansion
+This project predicts vehicle motion by combining computer vision, GPS, and mathematical modeling. License plates are tracked as reference points, trajectories are approximated with Taylor expansion, and GPS plus Doppler-based velocity estimation enable dynamic safe distance calculation and real-time collision alerts.
