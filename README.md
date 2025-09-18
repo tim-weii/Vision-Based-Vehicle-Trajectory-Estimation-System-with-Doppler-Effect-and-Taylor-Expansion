@@ -85,3 +85,88 @@ Visualization & Output
  ├─ Overlays (bbox, ID, trajectory, risk)
  └─ Alerts (color, audio, logs)
 ```
+
+
+## 🔄 Workflow (Step-by-Step)
+
+The system processes video streams and sensor inputs step by step:
+
+1. **Vehicle Detection**  
+   - Detect vehicles from raw video frames using YOLOv3.  
+   - Extract license plate regions with preprocessing (contrast, denoising, edge ops).  
+   - Plate centers serve as **stable reference points**.  
+   - *Example:*  
+     ![Vehicle detection and plate extraction](<img width="204" height="155" alt="image" src="https://github.com/user-attachments/assets/1d25c0da-4d3f-437e-ba57-0d6853113141" />
+)
+
+---
+
+2. **Tracking (ID Consistency)**  
+   - Maintain consistent IDs across frames using a Kalman filter (state: `[x, y, vx, vy]`).  
+   - Prevents ID switching when occlusion or detection jitter occurs.
+   
+---
+
+3. **Trajectory Buffer & Taylor Expansion**  
+   - Store trajectory history in a sliding buffer `{t, x, y, θ}`.  
+   - Apply **Taylor expansion** for short-term trajectory prediction (0.5–1.5s).  
+
+   **Formula:**  
+   $$
+   x(t) \approx x_0 + v_x \Delta t + \tfrac{1}{2} a_x \Delta t^2 \\
+   y(t) \approx y_0 + v_y \Delta t + \tfrac{1}{2} a_y \Delta t^2
+   $$
+
+---
+
+4. **Sensor Fusion (GPS + Doppler)**  
+   - GPS provides ego-velocity $v_{ego}$ and heading $\psi$.  
+   - Doppler (or visual proxy) provides **radial relative velocity** $v_{rel}$.  
+   - Fusion yields **range and range-rate** estimation.  
+
+   **Formula:**  
+   $$
+   v_{rel} = (v_{target} - v_{ego}) \cdot \hat{r}
+   $$
+
+---
+
+5. **Risk Assessment**  
+   - Two strategies:  
+     - **Physics-based safe distance:**  
+       $$
+       d_{safe} = v_{ego} \cdot t_{react} + \frac{v_{ego}^2}{2a_{brake}}
+       $$  
+     - **Time-to-Collision (TTC):**  
+       $$
+       TTC = \frac{distance}{\max(\epsilon, v_{closing})}
+       $$  
+
+   - Risk alert is triggered if:  
+     - $distance < d_{safe}$, OR  
+     - $TTC < \tau$ (threshold).  
+
+---
+
+6. **Visualization & Alerts**  
+   - Overlay predicted trajectories, risk zones, and alert signals.  
+   - High-risk vehicles are marked in **red** with optional audio/haptic alerts.  
+   - *Example:*  
+     ![Final overlay visualization](<img width="694" height="401" alt="image" src="https://github.com/user-attachments/assets/8658f11e-3da1-4606-9cfd-c3e5afeef054" />
+
+---
+
+##  System Diagram
+
+```mermaid
+flowchart LR
+    A[Camera Frames] --> B[YOLOv3 Detection]
+    B --> C[License Plate Extraction]
+    C --> D[Tracking (Kalman)]
+    D --> E[Trajectory Buffer]
+    E --> F[Taylor Expansion Prediction]
+    F --> G[Fusion (GPS + Doppler)]
+    G --> H[Risk Assessment]
+    H --> I[Visualization & Alerts]
+
+```
