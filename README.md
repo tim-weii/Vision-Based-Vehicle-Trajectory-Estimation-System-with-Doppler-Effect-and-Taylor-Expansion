@@ -225,7 +225,7 @@ flowchart LR
     C --> D[Tracking (Kalman)];
     D --> E[Trajectory Buffer];
     E --> F[Taylor Expansion Prediction];
-    F --> G[Fusion (GPS + Doppler)];
+    F --> G[Fusion => GPS + Doppler];
     G --> H[Risk Assessment];
     H --> I[Visualization & Alerts];
 ```
