@@ -112,8 +112,9 @@ The system processes video streams and sensor inputs step by step:
 
    *Visualization:*  
    <p align="center">
-     <img src="<img width="258" height="195" alt="image" src="https://github.com/user-attachments/assets/0b624894-90b0-4584-9c3f-1edce21c9709" />
-" alt="Kalman filter tracking visualization" width="400">
+     <img src="<img width="600" height="453" alt="image" src="https://github.com/user-attachments/assets/c105c29a-c272-4d36-be40-13a51f9c7582" />
+">
+https://www.researchgate.net/figure/Working-principle-of-Kalman-filter_fig4_354627620
    </p>
 
 ---
