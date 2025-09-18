@@ -14,6 +14,20 @@ Vehicles are detected from single or multiple cameras, and **license plates are 
 
 ---
 
+##  System Diagram
+
+```mermaid
+flowchart LR
+    A[Camera Frames] --> B[YOLOv3 Detection];
+    B --> C[License Plate Extraction];
+    C --> D[Tracking => Kalman];
+    D --> E[Trajectory Buffer];
+    E --> F[Taylor Expansion Prediction];
+    F --> G[Fusion => GPS + Doppler];
+    G --> H[Risk Assessment];
+    H --> I[Visualization & Alerts];
+```
+
 ##  Repository Layout
 
 ```text
@@ -215,18 +229,3 @@ A smaller TTC implies higher collision risk.
    </p>
 
 ---
-
-##  System Diagram
-
-```mermaid
-flowchart LR
-    A[Camera Frames] --> B[YOLOv3 Detection];
-    B --> C[License Plate Extraction];
-    C --> D[Tracking => Kalman];
-    D --> E[Trajectory Buffer];
-    E --> F[Taylor Expansion Prediction];
-    F --> G[Fusion => GPS + Doppler];
-    G --> H[Risk Assessment];
-    H --> I[Visualization & Alerts];
-```
-
