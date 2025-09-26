@@ -1,4 +1,4 @@
-#  Vision-Based Vehicle Trajectory Estimation System
+#  Vision Based Vehicle Trajectory Estimation System with Doppler Effect and Taylor Expansion
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)](https://www.python.org/)  
 [![YOLOv3](https://img.shields.io/badge/YOLOv3-Object%20Detection-green)](https://pjreddie.com/darknet/yolo/)  
